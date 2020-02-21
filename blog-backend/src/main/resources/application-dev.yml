@@ -1,0 +1,97 @@
+server:
+  port: 18081
+  servlet:
+    context-path: /blog-backend
+
+# shiro 路径配置
+shiro:
+  loginUrl: https://127.0.0.1:8080/cas/login?service=http://127.0.0.1:18081/blog-backend/shiro-cas
+  logoutUrl: https://127.0.0.1:8080/cas/logout?service=http://127.0.0.1:18081/blog-backend/shiro-cas
+  successUrl: /shiro/hello
+  failureUrl: /login
+  # 过滤器配置
+  casFilterUrlPattern: /shiro-cas
+  unauthorizedUrl: /unauthorizedUrl.html
+  logoutUrlPattern: /logout
+  #  "[]" 转义字符
+  authUrlPatternMap: {"[/**]": authc}
+  #    - {"/**":authc}
+  cas:
+    serverUrlPrefix: https://127.0.0.1:8080/cas
+    service: http://127.0.0.1:18081/blog-backend/shiro-cas
+
+#thymeleaf配置
+spring:
+  thymeleaf:
+    prefix: /templates/**
+    suffix: .html
+  resources:
+    static-locations: classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/, classpath:/templates/
+
+
+# durid数据库连接池
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/blog_article?zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useUnicode=true&useSSL=false
+    username: blog-article
+    password: blog-article
+    #	 druid 会根据url自己找driverClassName,所以这个就不用配了
+    #    driverClassName: oracle.jdbc.driver.OracleDriver
+
+    # 连接池配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 5
+    maxWait: 60000
+
+    # 多久检测一次 检测需要关闭的空闲连接
+    timeBetweenEvictionRunsMillis: 60000
+
+    # 连接池中最小生存时间
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+
+    # 打开PSCache 指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+
+    # 通过connectProperties属性打开mergesql功能；慢sql记录
+    filters: start,wall,log4j
+    connectionProperties:
+      druid:
+        stat:
+          mergeSql: true
+          slowSqlMillis: 5000
+
+  # jpa
+  jpa:
+    hibernate:
+      ddl-auto: update
+#      naming:
+        # 驼峰列明
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  jackson:
+    serialization:
+      indent_output: true
+
+
+  druid:
+    # 是否启用StatFilter配置
+    web-stat-filter:
+      enable: true
+    monitor:
+      # 多个白名单IP用逗号分隔
+      allow: 127.0.0.1
+      # 多个黑名单IP用逗号分隔
+      deny: 0.0.0.0
+      loginUsername: jsong
+      loginPassword: neusoft
+      # 是否开启重置功能
+      resetEnable: false
