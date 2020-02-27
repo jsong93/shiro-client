@@ -5,8 +5,8 @@ server:
 
 # shiro 路径配置
 shiro:
-  loginUrl: https://127.0.0.1:8080/cas/login?service=http://127.0.0.1:18081/blog-backend/shiro-cas
-  logoutUrl: https://127.0.0.1:8080/cas/logout?service=http://127.0.0.1:18081/blog-backend/shiro-cas
+  loginUrl: http://127.0.0.1:18080/cas/login?service=http://127.0.0.1:18081/blog-backend/shiro-cas
+  logoutUrl: http://127.0.0.1:18080/cas/logout?service=http://127.0.0.1:18081/blog-backend/shiro-cas
   successUrl: /shiro/hello
   failureUrl: /login
   # 过滤器配置
@@ -17,7 +17,7 @@ shiro:
   authUrlPatternMap: {"[/**]": authc}
   #    - {"/**":authc}
   cas:
-    serverUrlPrefix: https://127.0.0.1:8080/cas
+    serverUrlPrefix: http://127.0.0.1:18080/cas
     service: http://127.0.0.1:18081/blog-backend/shiro-cas
 
 #thymeleaf配置

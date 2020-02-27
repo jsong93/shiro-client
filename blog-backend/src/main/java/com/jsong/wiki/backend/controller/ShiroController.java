@@ -16,6 +16,7 @@ public class ShiroController {
 
     @ResponseBody
     @RequestMapping("/hello")
+//    @RequiresRoles("admin")
     public String getHello() {
         return "hello world";
     }

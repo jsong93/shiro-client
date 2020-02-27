@@ -1,0 +1,58 @@
+Configuration:
+  # 日志级别
+  status: warn
+  name: YAMLConfigTest
+  properties:
+    property:
+      name: blog-backend
+      value: D:\Project\git\blog-jsong\blog-backend\blog-backend.log
+      #value: target/test-yaml.log
+  # 最低级别
+  thresholdFilter:
+    level: debug
+  appenders:
+    # 控制台输出
+    Console:
+      name: STDOUT
+      # 模板布局
+      PatternLayout:
+        #Pattern: "%m%n"
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+    File:
+      name: File
+      fileName: ${filename}
+      PatternLayout:
+        #Pattern: "%d %p %C{1.} [%t] %m%n"
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+      Filters:
+        # 文件输出级别 报错才输出
+        ThresholdFilter:
+          level: error
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: "256 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+
+  Loggers:
+    logger:
+      -
+        name: org.apache.logging.log4j.test1
+        level: debug
+        additivity: false
+        ThreadContextMapFilter:
+          KeyValuePair:
+            key: test
+            value: 123
+        AppenderRef:
+          ref: STDOUT
+      -
+        name: org.apache.logging.log4j.test2
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: File
+    Root:
+      level: error
+      AppenderRef:
+        ref: STDOUT

@@ -1,10 +1,11 @@
 package com.jsong.wiki.backend.config;
 
 import com.jsong.wiki.backend.bean.ShiroUrl;
+import com.jsong.wiki.backend.filter.MyAuthenticationFilter;
 import com.jsong.wiki.backend.shiro.ShiroCasRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.cas.CasFilter;
 import org.apache.shiro.cas.CasSubjectFactory;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -24,8 +25,8 @@ public class ShiroConfig {
 
     // shiroFilter
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") DefaultWebSecurityManager securityManager,
-                                              @Qualifier("casFilter") CasFilter casFilter,
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,
+                                              @Qualifier("casFilter") MyAuthenticationFilter casFilter,
 //                                              @Qualifier("logoutFilter") LogoutFilter logoutFilter,
                                               ShiroUrl shiroUrl) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -53,8 +54,8 @@ public class ShiroConfig {
 
     // 认证filter
     @Bean
-    public CasFilter casFilter(ShiroUrl shiroUrl) {
-        CasFilter casFilter = new CasFilter();
+    public MyAuthenticationFilter casFilter(ShiroUrl shiroUrl) {
+        MyAuthenticationFilter casFilter = new MyAuthenticationFilter();
         // 登录成功url
         casFilter.setSuccessUrl(shiroUrl.getSuccessUrl());
         // 登录失败url
@@ -64,15 +65,14 @@ public class ShiroConfig {
 
     // 自定义 casRealm
     @Bean
-    public ShiroCasRealm casRealm(ShiroUrl shiroUrl
-//            ,EhCacheManager ehCacheManager
+    public ShiroCasRealm casRealm(ShiroUrl shiroUrl, EhCacheManager ehCacheManager
     ) {
         ShiroCasRealm casRealm = new ShiroCasRealm();
         // cas服务器
         casRealm.setCasServerUrlPrefix(shiroUrl.getCas().getServerUrlPrefix());
         // 客户端地址，用于接收tiket
         casRealm.setCasService(shiroUrl.getCas().getService());
-//        casRealm.setCacheManager(ehCacheManager);
+        casRealm.setCacheManager(ehCacheManager);
         return casRealm;
     }
 
@@ -91,28 +91,26 @@ public class ShiroConfig {
         return logoutFilter;
     }
 
-//    @Bean
+    @Bean
     public EhCacheManager ehCacheManager() {
         EhCacheManager ehCacheManager = new EhCacheManager();
         ehCacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
         return ehCacheManager;
     }
 
-    //    配置securityManager
+    //    配置securityManager SecurityManager,Shiro的安全管理，主要是身份认证的管理，缓存管理，cookie管理
     @Bean
-    public DefaultWebSecurityManager securityManager(ShiroCasRealm casRealm
-//            ,
-//                                                     EhCacheManager ehCacheManager
+    public SecurityManager securityManager(ShiroCasRealm casRealm, EhCacheManager ehCacheManager
     ) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setSubjectFactory(new CasSubjectFactory());
-//        securityManager.setCacheManager(ehCacheManager);
+        securityManager.setCacheManager(ehCacheManager);
         securityManager.setRealm(casRealm);
         return securityManager;
     }
 
     //    配置lifecycleBeanPostProcessor,shiro bean的生命周期管理器,可以自动调用Spring IOC容器中shiro bean的生命周期方法(初始化/销毁)
-    @Bean
+//    @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
@@ -120,7 +118,7 @@ public class ShiroConfig {
     /*    为了支持Shiro的注解需要定义DefaultAdvisorAutoProxyCreator和AuthorizationAttributeSourceAdvisor两个bean
         配置DefaultAdvisorAutoProxyCreator,必须配置了lifecycleBeanPostProcessor才能使用*/
 //    @DependsOn("lifecycleBeanPostProcessor")
-    @Bean
+//    @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         return defaultAdvisorAutoProxyCreator;
@@ -128,9 +126,9 @@ public class ShiroConfig {
 
     //    配置AuthorizationAttributeSourceAdvisor
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
+           return authorizationAttributeSourceAdvisor;
     }
 }
