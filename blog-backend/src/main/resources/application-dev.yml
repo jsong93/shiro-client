@@ -15,6 +15,7 @@ shiro:
   logoutUrlPattern: /logout
   #  "[]" 转义字符
   authUrlPatternMap: {"[/**]": authc}
+#  "[/blog-backend/**]":userFilter
   #    - {"/**":authc}
   cas:
     serverUrlPrefix: http://127.0.0.1:18080/cas
@@ -95,3 +96,7 @@ spring:
       loginPassword: neusoft
       # 是否开启重置功能
       resetEnable: false
+
+# 前端URL
+front:
+  baseUrl: http://localhost:28080/#

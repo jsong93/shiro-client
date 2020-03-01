@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/blog")
 @Log4j2
 public class BlogController {
-//    @CrossOrigin
+    //    @CrossOrigin
     @RequestMapping("/save")
-    public void save() {
+    public String save() {
         log.info("save");
         System.out.println(111);
+        return "111";
     }
 }

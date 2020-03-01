@@ -125,6 +125,12 @@
             <scope>test</scope>
         </dependency>
 
+<!--        fastjson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
         <!--            跨域-->
         <!-- https://mvnrepository.com/artifact/com.thetransactioncompany/java-property-utils -->
         <dependency>

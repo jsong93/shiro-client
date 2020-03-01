@@ -2,14 +2,17 @@ package com.jsong.wiki.backend.config;
 
 import com.jsong.wiki.backend.bean.ShiroUrl;
 import com.jsong.wiki.backend.filter.MyAuthenticationFilter;
+import com.jsong.wiki.backend.filter.MyUserFilter;
 import com.jsong.wiki.backend.shiro.ShiroCasRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.cas.CasFilter;
 import org.apache.shiro.cas.CasSubjectFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
+import org.apache.shiro.web.filter.authc.UserFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +31,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,
                                               @Qualifier("casFilter") MyAuthenticationFilter casFilter,
 //                                              @Qualifier("logoutFilter") LogoutFilter logoutFilter,
+                                              @Qualifier("userFilter") MyUserFilter userFilter,
                                               ShiroUrl shiroUrl) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -38,13 +42,17 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl(shiroUrl.getUnauthorizedUrl());
 
         Map<String, Filter> filters = new HashMap<>();
+
+//        org.apache.shiro.web.filter.mgt.DefaultFilter 包含所有的过滤器
         filters.put("casFilter", casFilter);
+        filters.put("userFilter", userFilter);
 //        filters.put("logoutFilter", logoutFilter);
 //        将Filter添加到Shiro过滤器链中,用于对资源设置权限
         shiroFilterFactoryBean.setFilters(filters);
 
         Map<String, String> filterChainDefinitionMap = new HashMap<String, String>();
         filterChainDefinitionMap.put(shiroUrl.getCasFilterUrlPattern(), "casFilter");
+//        filterChainDefinitionMap.put(shiroUrl.getCasFilterUrlPattern(), "userFilter");
 //        filterChainDefinitionMap.put(shiroUrl.getLogoutUrlPattern(), "logoutFilter");
         filterChainDefinitionMap.putAll(shiroUrl.getAuthUrlPatternMap());
         // 配置哪些请求需要受保护,以及访问这些页面需要的权限
@@ -61,6 +69,18 @@ public class ShiroConfig {
         // 登录失败url
         casFilter.setFailureUrl(shiroUrl.getFailureUrl());
         return casFilter;
+    }
+
+  /***
+   * 配置登录后重定向filter
+   * @date 2020/2/29 20:41
+   * @author Jsong
+   * @param
+   * @return com.jsong.wiki.backend.filter.MyUserFilter
+   */
+    @Bean
+    public MyUserFilter userFilter(){
+        return new MyUserFilter();
     }
 
     // 自定义 casRealm
