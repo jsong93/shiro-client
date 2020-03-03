@@ -2,6 +2,7 @@ package com.jsong.wiki.backend.config;
 
 import com.jsong.wiki.backend.bean.ShiroUrl;
 import com.jsong.wiki.backend.filter.MyAuthenticationFilter;
+import com.jsong.wiki.backend.filter.MyFormAuthenticationFilter;
 import com.jsong.wiki.backend.filter.MyUserFilter;
 import com.jsong.wiki.backend.shiro.ShiroCasRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -32,6 +33,7 @@ public class ShiroConfig {
                                               @Qualifier("casFilter") MyAuthenticationFilter casFilter,
 //                                              @Qualifier("logoutFilter") LogoutFilter logoutFilter,
                                               @Qualifier("userFilter") MyUserFilter userFilter,
+                                              MyFormAuthenticationFilter myFormAuthenticationFilter,
                                               ShiroUrl shiroUrl) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -46,6 +48,7 @@ public class ShiroConfig {
 //        org.apache.shiro.web.filter.mgt.DefaultFilter 包含所有的过滤器
         filters.put("casFilter", casFilter);
         filters.put("userFilter", userFilter);
+        filters.put("authc", myFormAuthenticationFilter);
 //        filters.put("logoutFilter", logoutFilter);
 //        将Filter添加到Shiro过滤器链中,用于对资源设置权限
         shiroFilterFactoryBean.setFilters(filters);
@@ -81,6 +84,11 @@ public class ShiroConfig {
     @Bean
     public MyUserFilter userFilter(){
         return new MyUserFilter();
+    }
+
+    @Bean
+    public MyFormAuthenticationFilter myFormAuthenticationFilter(){
+        return new MyFormAuthenticationFilter();
     }
 
     // 自定义 casRealm

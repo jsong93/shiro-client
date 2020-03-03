@@ -100,3 +100,14 @@ spring:
 # 前端URL
 front:
   baseUrl: http://localhost:28080/#
+  # cookie 前端地址
+  uri: front-uri
+
+api:
+  # 请求头接口地址
+  uri: api-uri
+
+# cookie配置
+cookie:
+  domain: 127.0.0.1
+  path: /
