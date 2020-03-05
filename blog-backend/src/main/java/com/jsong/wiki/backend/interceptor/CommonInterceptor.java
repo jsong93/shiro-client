@@ -16,6 +16,7 @@ public class CommonInterceptor implements HandlerInterceptor {
     // interceptor 里的注入为空指针，因为拦截器实在springcontext创建之前的
     @Autowired
     private CookieProperties cookieProperties;
+
     /**
      * 跨域拦截器
      *
@@ -32,17 +33,22 @@ public class CommonInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Origin", "null");
 //        Cookie cookie = new Cookie("front-url", request.getHeader("front-url"));
 //        response.addCookie(cookie);
-        Cookie[] cookies = request.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-            cookies[i].setPath(cookieProperties.getPath());
-            cookies[i].setDomain(cookieProperties.getDomain());
-            response.addCookie(cookies[i]);
-        }
+
+
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (int i = 0; i < cookies.length; i++) {
+//                cookies[i].setPath(cookieProperties.getPath());
+//                cookies[i].setDomain(cookieProperties.getDomain());
+////                response.addCookie(cookies[i]);
+//            }
+//        }
+
 //        response.setHeader("Access-Control-Allow-Origin", "http://localhost:28080");
-        if (request.getMethod().equals("OPTIONS")) {
-            response.addHeader("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH");
-            response.addHeader("Access-Control-Allow-Headers", "Content-Type,Accept,Authorization");
-        }
+//        if (request.getMethod().equals("OPTIONS")) {
+//            response.addHeader("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH");
+//            response.addHeader("Access-Control-Allow-Headers", "Content-Type,Accept,Authorization");
+//        }
         return true;
     }
 }

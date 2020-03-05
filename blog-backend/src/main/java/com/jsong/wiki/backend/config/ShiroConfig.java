@@ -24,6 +24,7 @@ import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @Configuration
 public class ShiroConfig {
 
