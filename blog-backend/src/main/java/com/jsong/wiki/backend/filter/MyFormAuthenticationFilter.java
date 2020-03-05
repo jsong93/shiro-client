@@ -73,6 +73,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
             Cookie cookie = new Cookie(frontUri, ((HttpServletRequest) request).getHeader(frontUri));
             cookie.setDomain(cookieProperties.getDomain());
             cookie.setPath(cookieProperties.getPath());
+            cookie.setHttpOnly(cookieProperties.getHttpOnly());
             ((HttpServletResponse) response).addCookie(cookie);
 //            saveRequestAndRedirectToLogin(request, response);
             saveRequest(request);
