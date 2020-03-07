@@ -24,6 +24,7 @@ import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @Configuration
 public class ShiroConfig {
 
@@ -33,7 +34,7 @@ public class ShiroConfig {
                                               @Qualifier("casFilter") MyAuthenticationFilter casFilter,
 //                                              @Qualifier("logoutFilter") LogoutFilter logoutFilter,
                                               @Qualifier("userFilter") MyUserFilter userFilter,
-                                              MyFormAuthenticationFilter myFormAuthenticationFilter,
+//                                              MyFormAuthenticationFilter myFormAuthenticationFilter,
                                               ShiroUrl shiroUrl) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -48,7 +49,7 @@ public class ShiroConfig {
 //        org.apache.shiro.web.filter.mgt.DefaultFilter 包含所有的过滤器
         filters.put("casFilter", casFilter);
         filters.put("userFilter", userFilter);
-        filters.put("authc", myFormAuthenticationFilter);
+//        filters.put("authc", myFormAuthenticationFilter);
 //        filters.put("logoutFilter", logoutFilter);
 //        将Filter添加到Shiro过滤器链中,用于对资源设置权限
         shiroFilterFactoryBean.setFilters(filters);
@@ -86,10 +87,10 @@ public class ShiroConfig {
         return new MyUserFilter();
     }
 
-    @Bean
-    public MyFormAuthenticationFilter myFormAuthenticationFilter(){
-        return new MyFormAuthenticationFilter();
-    }
+//    @Bean
+//    public MyFormAuthenticationFilter myFormAuthenticationFilter(){
+//        return new MyFormAuthenticationFilter();
+//    }
 
     // 自定义 casRealm
     @Bean
