@@ -28,8 +28,8 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 
     @Value("${shiro.loginUrl}")
     private String loginUrl;
-    @Value("${front.uri}")
-    private String frontUri;
+    @Value("${front.url}")
+    private String frontUrl;
 //    @Override
 //    protected void saveRequestAndRedirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
 //        log.info("-----------------redirect login --------------------");
@@ -70,7 +70,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
                         "Authentication url [" + getLoginUrl() + "]");
             }
             log.info("-----------------redirect login --------------------");
-            Cookie cookie = new Cookie(frontUri, ((HttpServletRequest) request).getHeader(frontUri));
+            Cookie cookie = new Cookie(frontUrl, ((HttpServletRequest) request).getHeader(frontUrl));
             cookie.setDomain(cookieProperties.getDomain());
             cookie.setPath(cookieProperties.getPath());
             cookie.setHttpOnly(cookieProperties.getHttpOnly());

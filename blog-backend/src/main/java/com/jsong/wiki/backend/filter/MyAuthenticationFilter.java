@@ -38,10 +38,12 @@ public class MyAuthenticationFilter extends CasFilter {
     private String frontBaseUrl;
     @Value("{shiro.loginUrl}")
     private String loginUrl;
-    @Value("${front.uri}")
-    private String frontUri;
+    @Value("${front.url}")
+    private String frontUrl;
     @Value("${api.uri}")
     private  String apiUri;
+
+    private String test = "http://127.0.0.1:28080/#";
 
 //    @Autowired
 //    private MyFormAuthenticationFilter myFormAuthenticationFilter;
@@ -54,8 +56,15 @@ public class MyAuthenticationFilter extends CasFilter {
             // 重cookie中获取上次请求的地址，并且重定向到前端
             Cookie[] cookies = ((ShiroHttpServletRequest) request).getCookies();
             for (Cookie cookie : cookies) {
-                if(frontUri.equals(cookie.getName())){
-                    originalUrl = frontBaseUrl + cookie.getValue();
+                if(frontUrl.equals(cookie.getName())){
+                    // 神奇的问题
+//                    originalUrl = frontBaseUrl+ cookie.getValue();
+//                    originalUrl = "http://127.0.0.1:28080/#"+ cookie.getValue();
+//                    originalUrl = frontBaseUrl + "/blog-edit";
+//                    originalUrl = test + cookie.getValue();
+//                    originalUrl = "http://127.0.0.1:28080/#/";
+                    originalUrl = cookie.getValue();
+                    log.info("originalUrl:"+originalUrl);
                 }
             }
         }
