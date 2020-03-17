@@ -3,7 +3,7 @@
 https://blog.csdn.net/JsongNeu/article/details/104643815
 
 cas 服务器
-https://github.com/jsong93/cas-server.git
+https://github.com/jsong93/cas-server
 
 # 写在前面
 在设计开发自己的博客系统时，选择cas+shiro做用户认证和鉴权的框架，实现单点登录，方便接入其他系统。
