@@ -2,6 +2,8 @@ package com.jsong.wiki.backend.filter;
 
 import com.jsong.wiki.backend.bean.CookieProperties;
 import lombok.extern.log4j.Log4j2;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
     @Value("${front.url}")
     private String frontUrl;
 
-//    protected void saveRequestAndRedirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
+    //    protected void saveRequestAndRedirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
 //        log.info("-----------------redirect login --------------------");
 //        Cookie cookie = new Cookie("front-url", ((HttpServletRequest) request).getHeader("front-url"));
 //        ((HttpServletResponse) response).addCookie(cookie);
@@ -100,6 +102,12 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 //            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //            return false;
 //            }
+            Subject subject = SecurityUtils.getSubject();
+            if (!subject.isAuthenticated()) {
+                // 未授权，返回前端状态401 进行重定向
+                ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return false;
+            }
             // ajax 重定向会返回html页面字符串
             WebUtils.issueRedirect(request, response, loginUrl);
             return false;

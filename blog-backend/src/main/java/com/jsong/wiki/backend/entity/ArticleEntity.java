@@ -1,5 +1,7 @@
 package com.jsong.wiki.backend.entity;
 
+import org.hibernate.annotations.GeneratorType;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -17,6 +19,7 @@ public class ArticleEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
