@@ -1,7 +1,5 @@
 package com.jsong.wiki.backend.entity;
 
-import org.hibernate.annotations.GeneratorType;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -15,7 +13,7 @@ public class ArticleEntity {
     private Integer modifliedTime;
     private String tag;
     private String isSecret;
-    private FloderEntity floderByFloderId;
+    private FolderEntity floderByFloderId;
 
     @Id
     @Column(name = "id")
@@ -108,12 +106,12 @@ public class ArticleEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "floderId", referencedColumnName = "id")
-    public FloderEntity getFloderByFloderId() {
+    @JoinColumn(name = "folderId", referencedColumnName = "id")
+    public FolderEntity getFloderByFloderId() {
         return floderByFloderId;
     }
 
-    public void setFloderByFloderId(FloderEntity floderByFloderId) {
+    public void setFloderByFloderId(FolderEntity floderByFloderId) {
         this.floderByFloderId = floderByFloderId;
     }
 }

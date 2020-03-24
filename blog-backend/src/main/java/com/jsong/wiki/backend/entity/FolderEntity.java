@@ -1,21 +1,29 @@
 package com.jsong.wiki.backend.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "floder")
-public class FloderEntity {
+@Table(name = "folder")
+// 开启自动插入创建时间 修改时间支持
+@EntityListeners(AuditingEntityListener.class)
+public class FolderEntity {
     private int id;
-    private String floderName;
     private String isSecret;
-    private Integer createdTime;
+    private Date createdTime;
     private Collection<ArticleEntity> articlesById;
-    private Integer modifiedTime;
+    private Date modifiedTime;
+    private String folderName;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -24,15 +32,6 @@ public class FloderEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "floder_name")
-    public String getFloderName() {
-        return floderName;
-    }
-
-    public void setFloderName(String floderName) {
-        this.floderName = floderName;
-    }
 
     @Basic
     @Column(name = "is_secret")
@@ -45,12 +44,13 @@ public class FloderEntity {
     }
 
     @Basic
+    @CreatedDate
     @Column(name = "created_time")
-    public Integer getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Integer createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -58,16 +58,16 @@ public class FloderEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FloderEntity that = (FloderEntity) o;
+        FolderEntity that = (FolderEntity) o;
         return id == that.id &&
-                Objects.equals(floderName, that.floderName) &&
+                Objects.equals(folderName, that.folderName) &&
                 Objects.equals(isSecret, that.isSecret) &&
                 Objects.equals(createdTime, that.createdTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, floderName, isSecret, createdTime);
+        return Objects.hash(id, folderName, isSecret, createdTime);
     }
 
     @OneToMany(mappedBy = "floderByFloderId")
@@ -80,12 +80,23 @@ public class FloderEntity {
     }
 
     @Basic
+    @LastModifiedDate
     @Column(name = "modified_time")
-    public Integer getModifiedTime() {
+    public Date getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Integer modifiedTime) {
+    public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    @Basic
+    @Column(name = "folder_name")
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
     }
 }

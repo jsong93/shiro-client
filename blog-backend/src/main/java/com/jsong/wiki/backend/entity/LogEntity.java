@@ -1,19 +1,30 @@
 package com.jsong.wiki.backend.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "log")
 public class LogEntity {
     private int id;
     private Integer userId;
     private String userName;
     private String operate;
-    private Integer operateTime;
+    private Date createTime;
     private String ip;
+    private Integer duration;
+    private String params;
+    private String method;
+    private String createBy;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -34,6 +45,7 @@ public class LogEntity {
     }
 
     @Basic
+    @CreatedBy
     @Column(name = "user_name")
     public String getUserName() {
         return userName;
@@ -54,13 +66,14 @@ public class LogEntity {
     }
 
     @Basic
-    @Column(name = "operate_time")
-    public Integer getOperateTime() {
-        return operateTime;
+    @CreationTimestamp
+    @Column(name = "create_time")
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setOperateTime(Integer operateTime) {
-        this.operateTime = operateTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Basic
@@ -82,12 +95,53 @@ public class LogEntity {
                 Objects.equals(userId, logEntity.userId) &&
                 Objects.equals(userName, logEntity.userName) &&
                 Objects.equals(operate, logEntity.operate) &&
-                Objects.equals(operateTime, logEntity.operateTime) &&
+                Objects.equals(createTime, logEntity.createTime) &&
                 Objects.equals(ip, logEntity.ip);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, userName, operate, operateTime, ip);
+        return Objects.hash(id, userId, userName, operate, createTime, ip);
+    }
+
+    @Basic
+    @Column(name = "duration")
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    @Basic
+    @Column(name = "params")
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    @Basic
+    @Column(name = "method")
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    @Basic
+    @CreatedBy
+    @Column(name = "create_by")
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 }
